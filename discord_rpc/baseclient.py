@@ -40,9 +40,9 @@ class BaseClient:
             status_code, length = struct.unpack('<II', preamble[:8])
             data = await asyncio.wait_for(self.sock_reader.read(length), self._response_timeout)
         except (BrokenPipeError, struct.error):
-            raise PipeClosed
+            raise PipeClosed()
         except asyncio.TimeoutError:
-            raise ResponseTimeout
+            raise ResponseTimeout()
         payload = json.loads(data.decode('utf-8'))
         if payload["evt"] == "ERROR":
             raise ServerError(payload["data"]["message"])
@@ -93,6 +93,6 @@ class BaseClient:
         data = json.loads(await self.sock_reader.read(length))
         if 'code' in data:
             if data['message'] == 'Invalid Client ID':
-                raise InvalidID
+                raise InvalidID()
             raise DiscordError(data['code'], data['message'])
         self.sock_reader.feed_data = self.on_event
