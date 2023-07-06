@@ -75,9 +75,9 @@ class BaseClient:
                 reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self._loop)
                 self.sock_writer, _ = await asyncio.wait_for(self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path), self._connection_timeout)
         except FileNotFoundError:
-            raise InvalidPipe
+            raise InvalidPipe()
         except asyncio.TimeoutError:
-            raise ConnectionTimeout
+            raise ConnectionTimeout()
 
         self.send_data(0, {'v': 1, 'client_id': self._client_id})
         preamble = await self.sock_reader.read(8)
