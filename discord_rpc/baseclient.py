@@ -31,10 +31,8 @@ class BaseClient:
         self.sock_reader: Optional[asyncio.StreamReader] = None
         self.sock_writer: Optional[asyncio.StreamWriter] = None
 
-        if getattr(self, "on_event", None):  # Tasty bad code ;^)
-            self._events_on = True
-        else:
-            self._events_on = False
+    def on_event(self, data) -> None:
+        pass
 
     async def read_output(self) -> Dict[str, Any]:
         try:
@@ -89,5 +87,4 @@ class BaseClient:
             if data['message'] == 'Invalid Client ID':
                 raise InvalidID
             raise DiscordError(data['code'], data['message'])
-        if self._events_on:
-            self.sock_reader.feed_data = self.on_event
+        self.sock_reader.feed_data = self.on_event
