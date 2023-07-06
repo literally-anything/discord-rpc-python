@@ -22,7 +22,7 @@ class BaseClient:
                  connection_timeout: float = 30.0,
                  response_timeout: float = 10.0,
                  **kwargs) -> None:
-        self.client_id = str(client_id)
+        self._client_id = str(client_id)
         self._loop = loop if loop is not None else asyncio.get_event_loop()
         self._pipe = pipe
         self._connection_timeout = connection_timeout
@@ -81,7 +81,7 @@ class BaseClient:
         except asyncio.TimeoutError:
             raise ConnectionTimeout
 
-        self.send_data(0, {'v': 1, 'client_id': self.client_id})
+        self.send_data(0, {'v': 1, 'client_id': self._client_id})
         preamble = await self.sock_reader.read(8)
         code, length = struct.unpack('<ii', preamble)
         data = json.loads(await self.sock_reader.read(length))
