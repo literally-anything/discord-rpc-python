@@ -17,7 +17,6 @@ class BaseClient:
 
     def __init__(self, client_id: str, **kwargs):
         loop = kwargs.get('loop', None)
-        handler = kwargs.get('handler', None)
         self.pipe = kwargs.get('pipe', None)
         self.isasync = kwargs.get('isasync', False)
         self.connection_timeout = kwargs.get('connection_timeout', 30)
@@ -35,26 +34,6 @@ class BaseClient:
 
         self.client_id = client_id
 
-        if handler is not None:
-            if not inspect.isfunction(handler):
-                raise PyPresenceException('Error handler must be a function.')
-            args = inspect.getfullargspec(handler).args
-            if args[0] == 'self':
-                args = args[1:]
-            if len(args) != 2:
-                raise PyPresenceException('Error handler should only accept two arguments.')
-
-            if self.isasync:
-                if not inspect.iscoroutinefunction(handler):
-                    raise InvalidArgument('Coroutine', 'Subroutine', 'You are running async mode - '
-                                                                     'your error handler should be awaitable.')
-                err_handler = self._async_err_handle
-            else:
-                err_handler = self._err_handle
-
-            loop.set_exception_handler(err_handler)
-            self.handler = handler
-
         if getattr(self, "on_event", None):  # Tasty bad code ;^)
             self._events_on = True
         else:
@@ -64,15 +43,6 @@ class BaseClient:
         # noinspection PyAttributeOutsideInit
         self.loop = loop
         asyncio.set_event_loop(self.loop)
-
-    def _err_handle(self, loop, context: dict):
-        result = self.handler(context['exception'], context['future'])
-        if inspect.iscoroutinefunction(self.handler):
-            loop.run_until_complete(result)
-
-    # noinspection PyUnusedLocal
-    async def _async_err_handle(self, loop, context: dict):
-        await self.handler(context['exception'], context['future'])
 
     async def read_output(self):
         try:
@@ -96,11 +66,11 @@ class BaseClient:
         assert self.sock_writer is not None, "You must connect your client before sending events!"
 
         self.sock_writer.write(
-            struct.pack(
-                '<II',
-                op,
-                len(payload)) +
-            payload.encode('utf-8'))
+                struct.pack(
+                        '<II',
+                        op,
+                        len(payload)) +
+                payload.encode('utf-8'))
 
     async def handshake(self):
         ipc_path = get_ipc_path(self.pipe)
