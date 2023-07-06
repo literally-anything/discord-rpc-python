@@ -15,19 +15,17 @@ from .utils import get_ipc_path, get_event_loop
 
 class BaseClient:
 
-    def __init__(self, client_id: str, **kwargs):
-        loop = kwargs.get('loop', None)
+    def __init__(self,
+                 client_id: str,
+                 loop: asyncio.AbstractEventLoop = None,
+                 **kwargs):
+        self._loop = loop if loop is not None else asyncio.get_event_loop()
         self.pipe = kwargs.get('pipe', None)
         self.isasync = kwargs.get('isasync', False)
         self.connection_timeout = kwargs.get('connection_timeout', 30)
         self.response_timeout = kwargs.get('response_timeout', 10)
 
         client_id = str(client_id)
-
-        if loop is not None:
-            self.update_event_loop(loop)
-        else:
-            self.update_event_loop(get_event_loop())
 
         self.sock_reader: Optional[asyncio.StreamReader] = None
         self.sock_writer: Optional[asyncio.StreamWriter] = None
@@ -38,11 +36,6 @@ class BaseClient:
             self._events_on = True
         else:
             self._events_on = False
-
-    def update_event_loop(self, loop):
-        # noinspection PyAttributeOutsideInit
-        self.loop = loop
-        asyncio.set_event_loop(self.loop)
 
     async def read_output(self):
         try:
@@ -81,9 +74,9 @@ class BaseClient:
             if sys.platform == 'linux' or sys.platform == 'darwin':
                 self.sock_reader, self.sock_writer = await asyncio.wait_for(asyncio.open_unix_connection(ipc_path), self.connection_timeout)
             elif sys.platform == 'win32' or sys.platform == 'win64':
-                self.sock_reader = asyncio.StreamReader(loop=self.loop)
-                reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self.loop)
-                self.sock_writer, _ = await asyncio.wait_for(self.loop.create_pipe_connection(lambda: reader_protocol, ipc_path), self.connection_timeout)
+                self.sock_reader = asyncio.StreamReader(loop=self._loop)
+                reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self._loop)
+                self.sock_writer, _ = await asyncio.wait_for(self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path), self.connection_timeout)
         except FileNotFoundError:
             raise InvalidPipe
         except asyncio.TimeoutError:
