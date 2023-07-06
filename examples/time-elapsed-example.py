@@ -1,4 +1,4 @@
-from pypresence import Presence
+from discord_rpc import Presence
 import time
 
 """

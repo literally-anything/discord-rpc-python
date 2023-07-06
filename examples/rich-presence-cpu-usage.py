@@ -1,5 +1,5 @@
 import psutil
-from pypresence import Presence
+from discord_rpc import Presence
 import time
 
 client_id = '64567352374564'  # Fake ID, put your real one here

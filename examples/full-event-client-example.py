@@ -1,10 +1,10 @@
 import asyncio
-import pypresence
+import discord_rpc
 
 CLIENT_ID = 555555555555555555
 
 loop = asyncio.get_event_loop()
-c = pypresence.Client(CLIENT_ID, loop=loop)
+c = discord_rpc.Client(CLIENT_ID, loop=loop)
 c.start()
 
 # Prompt user for authorization to do stuff with RPC scopes

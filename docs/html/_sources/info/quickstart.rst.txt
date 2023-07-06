@@ -30,7 +30,7 @@ Quickstart
 
 .. code-block:: python
 
- from pypresence import Presence # The simple rich presence client in pypresence
+ from pypresence import Presence # The simple rich presence client in discord_rpc
  import time
 
 **Next we need to initialize our Rich Presence client. You'll need that Client ID from earlier:**

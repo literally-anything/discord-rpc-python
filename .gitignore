@@ -14,7 +14,7 @@ nyaaa/
 .venv/
 venv/
 __pycache__/
-pypresence/__pycache__/
+discord_rpc/__pycache__/
 test.py
 .mypy_cache/
 *.egg-info/

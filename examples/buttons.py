@@ -1,4 +1,4 @@
-from pypresence import Presence
+from discord_rpc import Presence
 import time
 
 client_id = "client_id"  # Enter your Application ID here.

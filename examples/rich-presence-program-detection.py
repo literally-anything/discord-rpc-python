@@ -1,9 +1,9 @@
 import time
 
 import psutil
-import pypresence
+import discord_rpc
 
-rpc = pypresence.Presence('0123..')  # Put your Application ID here
+rpc = discord_rpc.Presence('0123..')  # Put your Application ID here
 data = None
 
 rpc.connect()

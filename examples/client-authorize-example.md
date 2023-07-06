@@ -1,9 +1,11 @@
 *copy pasted from Qweko Dev Discord - check pins*
 
 Client Authorization Example (For using Client's methods)
+
 ```py
-import pypresence
-c = pypresence.Client(CLIENT_ID)
+import discord_rpc
+
+c = discord_rpc.Client(CLIENT_ID)
 c.start()
 auth = c.authorize(CLIENT_ID, ['rpc'])  # If you need other scopes, add them
 code_grant = auth.code
