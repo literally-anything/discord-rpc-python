@@ -1,23 +1,6 @@
-> A Discord Rich Presence Client in Python? Looks like you've come to the right place.
+# discord-rpc-python
 
-[![GitHub stars](https://img.shields.io/github/stars/qwertyquerty/pypresence.svg?style=for-the-badge&label=Stars)](https://github.com/qwertyquerty/pypresence) [![license](https://img.shields.io/github/license/qwertyquerty/pypresence.svg?style=for-the-badge)](https://github.com/qwertyquerty/pypresence/blob/master/LICENSE) ![GitHub last commit](https://img.shields.io/github/last-commit/qwertyquerty/pypresence.svg?style=for-the-badge) ![GitHub top language](https://img.shields.io/github/languages/top/qwertyquerty/pypresence.svg?style=for-the-badge) ![PyPI](https://img.shields.io/pypi/v/pypresence.svg?style=for-the-badge)
-
-## NOTE: Only Python versions 3.8 and above are supported.
-
-### [Documentation](https://qwertyquerty.github.io/pypresence/html/index.html), [Discord Server](https://discord.gg/JF3kg77), [Patreon](https://www.patreon.com/qwertyquerty)
-
-----------
-
-**Use this badge in your project's Readme to show you're using pypresence! The markdown code is below.**
-
-[![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
-
-```markdown
-[![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
-```
-
-
-----------
+NOTE: Only Python versions 3.8 and above are supported.
 
 # Installation
 
@@ -53,6 +36,6 @@ Examples can be found in the [examples](https://github.com/qwertyquerty/pypresen
 ----------
 # Credits
 
-Originaly Written by: [qwertyquerty](https://github.com/qwertyquerty)
+Originaly Written by: [qwertyquerty](https://github.com/qwertyquerty): [Patreon](https://www.patreon.com/qwertyquerty)
 
 Notable Contributors: [GiovanniMCMXCIX](https://github.com/GiovanniMCMXCIX), [GhostofGoes](https://github.com/GhostofGoes)
