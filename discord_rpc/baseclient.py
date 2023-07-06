@@ -69,11 +69,19 @@ class BaseClient:
 
         try:
             if sys.platform == 'linux' or sys.platform == 'darwin':
-                self.sock_reader, self.sock_writer = await asyncio.wait_for(asyncio.open_unix_connection(ipc_path), self._connection_timeout)
-            elif sys.platform == 'win32' or sys.platform == 'win64':
-                self.sock_reader = asyncio.StreamReader(loop=self._loop)
-                reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self._loop)
-                self.sock_writer, _ = await asyncio.wait_for(self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path), self._connection_timeout)
+                self.sock_reader, self.sock_writer = await asyncio.wait_for(
+                        asyncio.open_unix_connection(ipc_path),
+                        self._connection_timeout
+                )
+            # elif sys.platform == 'win32' or sys.platform == 'win64':
+            #     self.sock_reader = asyncio.StreamReader(loop=self._loop)
+            #     reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self._loop)
+            #     self.sock_writer, _ = await asyncio.wait_for(
+            #             self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path),
+            #             self._connection_timeout
+            #     )
+            else:
+                raise OSError('OS not supported')
         except FileNotFoundError:
             raise InvalidPipe()
         except asyncio.TimeoutError:
