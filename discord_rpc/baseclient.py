@@ -18,9 +18,10 @@ class BaseClient:
     def __init__(self,
                  client_id: str,
                  loop: asyncio.AbstractEventLoop = None,
+                 pipe: int | None = None,
                  **kwargs) -> None:
         self._loop = loop if loop is not None else asyncio.get_event_loop()
-        self.pipe = kwargs.get('pipe', None)
+        self._pipe = pipe
         self.isasync = kwargs.get('isasync', False)
         self.connection_timeout = kwargs.get('connection_timeout', 30)
         self.response_timeout = kwargs.get('response_timeout', 10)
@@ -66,7 +67,7 @@ class BaseClient:
                 payload.encode('utf-8'))
 
     async def handshake(self) -> None:
-        ipc_path = get_ipc_path(self.pipe)
+        ipc_path = get_ipc_path(self._pipe)
         if not ipc_path:
             raise DiscordNotFound
 
