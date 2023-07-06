@@ -20,11 +20,12 @@ class BaseClient:
                  loop: asyncio.AbstractEventLoop = None,
                  pipe: int | None = None,
                  connection_timeout: float = 30.0,
+                 response_timeout: float = 10.0,
                  **kwargs) -> None:
         self._loop = loop if loop is not None else asyncio.get_event_loop()
         self._pipe = pipe
         self._connection_timeout = connection_timeout
-        self.response_timeout = kwargs.get('response_timeout', 10)
+        self._response_timeout = response_timeout
 
         client_id = str(client_id)
 
@@ -40,9 +41,9 @@ class BaseClient:
 
     async def read_output(self) -> Dict[str, Any]:
         try:
-            preamble = await asyncio.wait_for(self.sock_reader.read(8), self.response_timeout)
+            preamble = await asyncio.wait_for(self.sock_reader.read(8), self._response_timeout)
             status_code, length = struct.unpack('<II', preamble[:8])
-            data = await asyncio.wait_for(self.sock_reader.read(length), self.response_timeout)
+            data = await asyncio.wait_for(self.sock_reader.read(length), self._response_timeout)
         except (BrokenPipeError, struct.error):
             raise PipeClosed
         except asyncio.TimeoutError:
