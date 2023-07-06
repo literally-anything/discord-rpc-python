@@ -19,10 +19,11 @@ class BaseClient:
                  client_id: str,
                  loop: asyncio.AbstractEventLoop = None,
                  pipe: int | None = None,
+                 connection_timeout: float = 30.0,
                  **kwargs) -> None:
         self._loop = loop if loop is not None else asyncio.get_event_loop()
         self._pipe = pipe
-        self.connection_timeout = kwargs.get('connection_timeout', 30)
+        self._connection_timeout = connection_timeout
         self.response_timeout = kwargs.get('response_timeout', 10)
 
         client_id = str(client_id)
@@ -72,11 +73,11 @@ class BaseClient:
 
         try:
             if sys.platform == 'linux' or sys.platform == 'darwin':
-                self.sock_reader, self.sock_writer = await asyncio.wait_for(asyncio.open_unix_connection(ipc_path), self.connection_timeout)
+                self.sock_reader, self.sock_writer = await asyncio.wait_for(asyncio.open_unix_connection(ipc_path), self._connection_timeout)
             elif sys.platform == 'win32' or sys.platform == 'win64':
                 self.sock_reader = asyncio.StreamReader(loop=self._loop)
                 reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self._loop)
-                self.sock_writer, _ = await asyncio.wait_for(self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path), self.connection_timeout)
+                self.sock_writer, _ = await asyncio.wait_for(self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path), self._connection_timeout)
         except FileNotFoundError:
             raise InvalidPipe
         except asyncio.TimeoutError:
