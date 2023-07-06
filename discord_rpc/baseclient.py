@@ -65,7 +65,7 @@ class BaseClient:
     async def handshake(self) -> None:
         ipc_path = get_ipc_path(self._pipe)
         if not ipc_path:
-            raise DiscordNotFound
+            raise DiscordNotFound()
 
         try:
             if sys.platform == 'linux' or sys.platform == 'darwin':
