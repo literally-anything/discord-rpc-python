@@ -22,7 +22,6 @@ class BaseClient:
                  **kwargs) -> None:
         self._loop = loop if loop is not None else asyncio.get_event_loop()
         self._pipe = pipe
-        self.isasync = kwargs.get('isasync', False)
         self.connection_timeout = kwargs.get('connection_timeout', 30)
         self.response_timeout = kwargs.get('response_timeout', 10)
 
