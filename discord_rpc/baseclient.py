@@ -5,7 +5,7 @@ import os
 import struct
 import sys
 import tempfile
-from typing import Union, Optional
+from typing import Any, Dict, Union, Optional
 
 # TODO: Get rid of this import * lol
 from .exceptions import *
@@ -18,7 +18,7 @@ class BaseClient:
     def __init__(self,
                  client_id: str,
                  loop: asyncio.AbstractEventLoop = None,
-                 **kwargs):
+                 **kwargs) -> None:
         self._loop = loop if loop is not None else asyncio.get_event_loop()
         self.pipe = kwargs.get('pipe', None)
         self.isasync = kwargs.get('isasync', False)
@@ -37,7 +37,7 @@ class BaseClient:
         else:
             self._events_on = False
 
-    async def read_output(self):
+    async def read_output(self) -> Dict[str, Any]:
         try:
             preamble = await asyncio.wait_for(self.sock_reader.read(8), self.response_timeout)
             status_code, length = struct.unpack('<II', preamble[:8])
@@ -51,7 +51,7 @@ class BaseClient:
             raise ServerError(payload["data"]["message"])
         return payload
 
-    def send_data(self, op: int, payload: Union[dict, Payload]):
+    def send_data(self, op: int, payload: Union[dict, Payload]) -> None:
         if isinstance(payload, Payload):
             payload = payload.data
         payload = json.dumps(payload)
@@ -65,7 +65,7 @@ class BaseClient:
                         len(payload)) +
                 payload.encode('utf-8'))
 
-    async def handshake(self):
+    async def handshake(self) -> None:
         ipc_path = get_ipc_path(self.pipe)
         if not ipc_path:
             raise DiscordNotFound
