@@ -1,7 +1,7 @@
 """
 Python RPC Client for Discord
 -----------------------------
-By: qwertyquerty and LewdNeko
+Originally By: qwertyquerty and LewdNeko
 """
 
 from .baseclient import BaseClient
@@ -10,8 +10,7 @@ from .exceptions import *
 from .presence import Presence, AioPresence
 
 
-__title__ = 'pypresence'
-__author__ = 'qwertyquerty'
-__copyright__ = 'Copyright 2018 - Current qwertyquerty'
+__title__ = 'discord-rpc-python'
+__author__ = 'literally-anything'
 __license__ = 'MIT'
-__version__ = '4.2.2'
+__version__ = '0.0.0'
