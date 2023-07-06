@@ -16,23 +16,20 @@ from .utils import get_ipc_path, get_event_loop
 class BaseClient:
 
     def __init__(self,
-                 client_id: str,
+                 client_id: str | int,
                  loop: asyncio.AbstractEventLoop = None,
                  pipe: int | None = None,
                  connection_timeout: float = 30.0,
                  response_timeout: float = 10.0,
                  **kwargs) -> None:
+        self.client_id = str(client_id)
         self._loop = loop if loop is not None else asyncio.get_event_loop()
         self._pipe = pipe
         self._connection_timeout = connection_timeout
         self._response_timeout = response_timeout
 
-        client_id = str(client_id)
-
         self.sock_reader: Optional[asyncio.StreamReader] = None
         self.sock_writer: Optional[asyncio.StreamWriter] = None
-
-        self.client_id = client_id
 
         if getattr(self, "on_event", None):  # Tasty bad code ;^)
             self._events_on = True
