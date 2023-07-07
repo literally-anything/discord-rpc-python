@@ -8,17 +8,13 @@ from .utils import remove_none
 
 class Payload:
 
-    def __init__(self, data, clear_none=True):
+    def __init__(self, data, clear_none=True) -> None:
         if clear_none:
             data = remove_none(data)
         self.data = data
 
-    def __str__(self):
+    def __str__(self) -> str:
         return json.dumps(self.data, indent=2)
-
-    @staticmethod
-    def time():
-        return time.time()
 
     @classmethod
     def set_activity(cls, pid: int = os.getpid(),
@@ -30,7 +26,7 @@ class Payload:
                      join: str = None, spectate: str = None,
                      match: str = None, buttons: list = None,
                      instance: bool = True, activity: Union[bool, None] = True,
-                     _rn: bool = True):
+                     _rn: bool = True) -> 'Payload':
 
         # They should already be an int because we give typehints, but some people are fucking stupid and use
         # IDLE or some other stupid shit.
@@ -44,30 +40,30 @@ class Payload:
             clear = True
         else:
             act_details = {
-                    "state": state,
-                    "details": details,
-                    "timestamps": {
-                        "start": start,
-                        "end": end
-                    },
-                    "assets": {
-                        "large_image": large_image,
-                        "large_text": large_text,
-                        "small_image": small_image,
-                        "small_text": small_text
-                    },
-                    "party": {
-                        "id": party_id,
-                        "size": party_size
-                    },
-                    "secrets": {
-                        "join": join,
-                        "spectate": spectate,
-                        "match": match
-                    },
-                    "buttons": buttons,
-                    "instance": instance
-                }
+                "state": state,
+                "details": details,
+                "timestamps": {
+                    "start": start,
+                    "end": end
+                },
+                "assets": {
+                    "large_image": large_image,
+                    "large_text": large_text,
+                    "small_image": small_image,
+                    "small_text": small_text
+                },
+                "party": {
+                    "id": party_id,
+                    "size": party_size
+                },
+                "secrets": {
+                    "join": join,
+                    "spectate": spectate,
+                    "match": match
+                },
+                "buttons": buttons,
+                "instance": instance
+            }
             clear = False
 
         payload = {
@@ -76,79 +72,79 @@ class Payload:
                 "pid": pid,
                 "activity": act_details
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
         if _rn:
             clear = _rn
         return cls(payload, clear)
 
     @classmethod
-    def authorize(cls, client_id: str, scopes: List[str]):
+    def authorize(cls, client_id: str, scopes: List[str]) -> 'Payload':
         payload = {
             "cmd": "AUTHORIZE",
             "args": {
                 "client_id": str(client_id),
                 "scopes": scopes
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
         return cls(payload)
 
     @classmethod
-    def authenticate(cls, token: str):
+    def authenticate(cls, token: str) -> 'Payload':
         payload = {
             "cmd": "AUTHENTICATE",
             "args": {
                 "access_token": token
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def get_guilds(cls):
+    def get_guilds(cls) -> 'Payload':
         payload = {
             "cmd": "GET_GUILDS",
             "args": {
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def get_guild(cls, guild_id: str):
+    def get_guild(cls, guild_id: str) -> 'Payload':
         payload = {
             "cmd": "GET_GUILD",
             "args": {
                 "guild_id": str(guild_id),
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def get_channels(cls, guild_id: str):
+    def get_channels(cls, guild_id: str) -> 'Payload':
         payload = {
             "cmd": "GET_CHANNELS",
             "args": {
                 "guild_id": str(guild_id),
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def get_channel(cls, channel_id: str):
+    def get_channel(cls, channel_id: str) -> 'Payload':
         payload = {
             "cmd": "GET_CHANNEL",
             "args": {
                 "channel_id": str(channel_id),
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
@@ -156,7 +152,7 @@ class Payload:
     @classmethod
     def set_user_voice_settings(cls, user_id: str, pan_left: float = None,
                                 pan_right: float = None, volume: int = None,
-                                mute: bool = None):
+                                mute: bool = None) -> 'Payload':
         payload = {
             "cmd": "SET_USER_VOICE_SETTINGS",
             "args": {
@@ -168,79 +164,79 @@ class Payload:
                 "volume": volume,
                 "mute": mute
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload, True)
 
     @classmethod
-    def select_voice_channel(cls, channel_id: str):
+    def select_voice_channel(cls, channel_id: str) -> 'Payload':
         payload = {
             "cmd": "SELECT_VOICE_CHANNEL",
             "args": {
                 "channel_id": str(channel_id),
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def get_selected_voice_channel(cls):
+    def get_selected_voice_channel(cls) -> 'Payload':
         payload = {
             "cmd": "GET_SELECTED_VOICE_CHANNEL",
             "args": {
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def select_text_channel(cls, channel_id: str):
+    def select_text_channel(cls, channel_id: str) -> 'Payload':
         payload = {
             "cmd": "SELECT_TEXT_CHANNEL",
             "args": {
                 "channel_id": str(channel_id),
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def subscribe(cls, event: str, args=None):
+    def subscribe(cls, event: str, args=None) -> 'Payload':
         if args is None:
             args = {}
         payload = {
             "cmd": "SUBSCRIBE",
             "args": args,
             "evt": event.upper(),
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def unsubscribe(cls, event: str, args=None):
+    def unsubscribe(cls, event: str, args=None) -> 'Payload':
         if args is None:
             args = {}
         payload = {
             "cmd": "UNSUBSCRIBE",
             "args": args,
             "evt": event.upper(),
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def get_voice_settings(cls):
+    def get_voice_settings(cls) -> 'Payload':
         payload = {
             "cmd": "GET_VOICE_SETTINGS",
             "args": {
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
@@ -250,7 +246,7 @@ class Payload:
                            mode: dict = None, automatic_gain_control: bool = None,
                            echo_cancellation: bool = None, noise_suppression: bool = None,
                            qos: bool = None, silence_warning: bool = None,
-                           deaf: bool = None, mute: bool = None):
+                           deaf: bool = None, mute: bool = None) -> 'Payload':
         payload = {
             "cmd": "SET_VOICE_SETTINGS",
             "args": {
@@ -265,43 +261,43 @@ class Payload:
                 "deaf": deaf,
                 "mute": mute
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload, True)
 
     @classmethod
-    def capture_shortcut(cls, action: str):
+    def capture_shortcut(cls, action: str) -> 'Payload':
         payload = {
             "cmd": "CAPTURE_SHORTCUT",
             "args": {
                 "action": action.upper()
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def send_activity_join_invite(cls, user_id: str):
+    def send_activity_join_invite(cls, user_id: str) -> 'Payload':
         payload = {
             "cmd": "SEND_ACTIVITY_JOIN_INVITE",
             "args": {
                 "user_id": str(user_id)
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
 
     @classmethod
-    def close_activity_request(cls, user_id: str):
+    def close_activity_request(cls, user_id: str) -> 'Payload':
         payload = {
             "cmd": "CLOSE_ACTIVITY_REQUEST",
             "args": {
                 "user_id": str(user_id)
             },
-            "nonce": '{:.20f}'.format(cls.time())
+            "nonce": '{:.20f}'.format(time.time())
         }
 
         return cls(payload)
