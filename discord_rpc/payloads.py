@@ -12,6 +12,8 @@ class Payload:
         if clear_none:
             data = remove_none(data)
         self.data = data
+        self.time = time.time()
+        self.data['nonce'] = '{:.20f}'.format(self.time)
 
     def __str__(self) -> str:
         return json.dumps(self.data, indent=2)
@@ -71,8 +73,7 @@ class Payload:
             "args": {
                 "pid": pid,
                 "activity": act_details
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
         if _rn:
             clear = _rn
@@ -85,8 +86,7 @@ class Payload:
             "args": {
                 "client_id": str(client_id),
                 "scopes": scopes
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
         return cls(payload)
 
@@ -96,8 +96,7 @@ class Payload:
             "cmd": "AUTHENTICATE",
             "args": {
                 "access_token": token
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -107,8 +106,7 @@ class Payload:
         payload = {
             "cmd": "GET_GUILDS",
             "args": {
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -119,8 +117,7 @@ class Payload:
             "cmd": "GET_GUILD",
             "args": {
                 "guild_id": str(guild_id),
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -131,8 +128,7 @@ class Payload:
             "cmd": "GET_CHANNELS",
             "args": {
                 "guild_id": str(guild_id),
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -143,8 +139,7 @@ class Payload:
             "cmd": "GET_CHANNEL",
             "args": {
                 "channel_id": str(channel_id),
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -163,8 +158,7 @@ class Payload:
                 },
                 "volume": volume,
                 "mute": mute
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload, True)
@@ -175,8 +169,7 @@ class Payload:
             "cmd": "SELECT_VOICE_CHANNEL",
             "args": {
                 "channel_id": str(channel_id),
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -186,8 +179,7 @@ class Payload:
         payload = {
             "cmd": "GET_SELECTED_VOICE_CHANNEL",
             "args": {
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -198,8 +190,7 @@ class Payload:
             "cmd": "SELECT_TEXT_CHANNEL",
             "args": {
                 "channel_id": str(channel_id),
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -211,8 +202,7 @@ class Payload:
         payload = {
             "cmd": "SUBSCRIBE",
             "args": args,
-            "evt": event.upper(),
-            "nonce": '{:.20f}'.format(time.time())
+            "evt": event.upper()
         }
 
         return cls(payload)
@@ -224,8 +214,7 @@ class Payload:
         payload = {
             "cmd": "UNSUBSCRIBE",
             "args": args,
-            "evt": event.upper(),
-            "nonce": '{:.20f}'.format(time.time())
+            "evt": event.upper()
         }
 
         return cls(payload)
@@ -235,8 +224,7 @@ class Payload:
         payload = {
             "cmd": "GET_VOICE_SETTINGS",
             "args": {
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -260,8 +248,7 @@ class Payload:
                 "silence_warning": silence_warning,
                 "deaf": deaf,
                 "mute": mute
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload, True)
@@ -272,8 +259,7 @@ class Payload:
             "cmd": "CAPTURE_SHORTCUT",
             "args": {
                 "action": action.upper()
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -284,8 +270,7 @@ class Payload:
             "cmd": "SEND_ACTIVITY_JOIN_INVITE",
             "args": {
                 "user_id": str(user_id)
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
@@ -296,8 +281,7 @@ class Payload:
             "cmd": "CLOSE_ACTIVITY_REQUEST",
             "args": {
                 "user_id": str(user_id)
-            },
-            "nonce": '{:.20f}'.format(time.time())
+            }
         }
 
         return cls(payload)
