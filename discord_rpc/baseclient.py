@@ -17,13 +17,11 @@ class BaseClient:
 
     def __init__(self,
                  client_id: str | int,
-                 loop: asyncio.AbstractEventLoop = None,
                  pipe: int | None = None,
                  connection_timeout: float = 30.0,
                  response_timeout: float = 10.0,
                  **kwargs) -> None:
         self._client_id = str(client_id)
-        self._loop = loop if loop is not None else asyncio.get_event_loop()
         self._pipe = pipe
         self._connection_timeout = connection_timeout
         self._response_timeout = response_timeout
@@ -74,10 +72,10 @@ class BaseClient:
                         self._connection_timeout
                 )
             # elif sys.platform == 'win32' or sys.platform == 'win64':
-            #     self.sock_reader = asyncio.StreamReader(loop=self._loop)
-            #     reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader, loop=self._loop)
+            #     self.sock_reader = asyncio.StreamReader()
+            #     reader_protocol = asyncio.StreamReaderProtocol(self.sock_reader)
             #     self.sock_writer, _ = await asyncio.wait_for(
-            #             self._loop.create_pipe_connection(lambda: reader_protocol, ipc_path),
+            #             asyncio.get_event_loop().create_pipe_connection(lambda: reader_protocol, ipc_path),
             #             self._connection_timeout
             #     )
             else:
